@@ -250,7 +250,7 @@ open class Chart: UIControl {
     override open func draw(_ rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-            #else
+        #else
             drawChart()
         #endif
     }
@@ -527,9 +527,9 @@ open class Chart: UIControl {
         context.strokePath()
 
         // horizontal axis at the top
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
-        context.strokePath()
+//        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+//        context.strokePath()
 
         // horizontal axis when y = 0
         if min.y < 0 && max.y > 0 {
@@ -539,15 +539,15 @@ open class Chart: UIControl {
             context.strokePath()
         }
 
-        // vertical axis on the left
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
-        context.strokePath()
-
-        // vertical axis on the right
-        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
-        context.strokePath()
+//        // vertical axis on the left
+//        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
+//        context.strokePath()
+//
+//        // vertical axis on the right
+//        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
+//        context.strokePath()
     }
 
     fileprivate func drawLabelsAndGridOnXAxis() {
@@ -572,11 +572,11 @@ open class Chart: UIControl {
 
             // Add vertical grid for each label, except axes on the left and right
 
-            if x != 0 && x != drawingWidth {
-                context.move(to: CGPoint(x: x, y: CGFloat(0)))
-                context.addLine(to: CGPoint(x: x, y: bounds.height))
-                context.strokePath()
-            }
+//            if x != 0 && x != drawingWidth {
+//                context.move(to: CGPoint(x: x, y: CGFloat(0)))
+//                context.addLine(to: CGPoint(x: x, y: bounds.height))
+//                context.strokePath()
+//            }
 
             if xLabelsSkipLast && isLastLabel {
                 // Do not add label at the most right position
@@ -642,6 +642,8 @@ open class Chart: UIControl {
 
         scaled.enumerated().forEach { (i, value) in
 
+            print("\(i): \(value)")
+            
             let y = CGFloat(value)
 
             // Add horizontal grid for each label, but not over axes
@@ -649,12 +651,12 @@ open class Chart: UIControl {
 
                 context.move(to: CGPoint(x: CGFloat(0), y: y))
                 context.addLine(to: CGPoint(x: self.bounds.width, y: y))
-                if labels[i] != 0 {
-                    // Horizontal grid for 0 is not dashed
-                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
-                } else {
-                    context.setLineDash(phase: CGFloat(0), lengths: [])
-                }
+//                if labels[i] != 0 {
+//                    // Horizontal grid for 0 is not dashed
+//                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
+//                } else {
+//                    context.setLineDash(phase: CGFloat(0), lengths: [])
+//                }
                 context.strokePath()
             }
 
