@@ -638,6 +638,7 @@ open class Chart: UIControl {
 
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
+        let yPadding: CGFloat = 3
         let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: 0))
 
         scaled.enumerated().forEach { (i, value) in
@@ -672,7 +673,7 @@ open class Chart: UIControl {
             }
 
             // Labels should be placed above the horizontal grid
-            label.frame.origin.y -= label.frame.height
+            label.frame.origin.y -= label.frame.height + yPadding
 
             self.addSubview(label)
         }
