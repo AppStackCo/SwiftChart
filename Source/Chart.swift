@@ -468,9 +468,24 @@ open class Chart: UIControl {
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         for i in 1..<yValues.count {
             let y = yValues[i]
-            path.addLine(to: CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y)))
-        }
+            
+            var point = CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y))
 
+            // add rounded rect on last value
+            if i == yValues.count - 1 {
+
+                point = CGPoint(x: point.x - 3, y: point.y)
+                path.addLine(to: point)
+
+                let origin = CGPoint(x: point.x - 3, y: point.y - 6)
+                path.addRoundedRect(in: CGRect(origin: origin, size: CGSize(width: 12, height: 12)), cornerWidth: 4, cornerHeight: 4)
+                
+            } else {
+                
+                path.addLine(to: point)
+            }
+        }
+        
         let lineLayer = CAShapeLayer()
         lineLayer.frame = self.bounds
         lineLayer.path = path
