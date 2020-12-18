@@ -250,7 +250,7 @@ open class Chart: UIControl {
     override open func draw(_ rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-            #else
+        #else
             drawChart()
         #endif
     }
@@ -468,9 +468,24 @@ open class Chart: UIControl {
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         for i in 1..<yValues.count {
             let y = yValues[i]
-            path.addLine(to: CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y)))
-        }
+            
+            var point = CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y))
 
+            // add rounded rect on last value
+            if i == yValues.count - 1 {
+
+                point = CGPoint(x: point.x - 3, y: point.y)
+                path.addLine(to: point)
+
+                let origin = CGPoint(x: point.x - 3, y: point.y - 6)
+                path.addRoundedRect(in: CGRect(origin: origin, size: CGSize(width: 12, height: 12)), cornerWidth: 4, cornerHeight: 4)
+                
+            } else {
+                
+                path.addLine(to: point)
+            }
+        }
+        
         let lineLayer = CAShapeLayer()
         lineLayer.frame = self.bounds
         lineLayer.path = path
@@ -527,9 +542,9 @@ open class Chart: UIControl {
         context.strokePath()
 
         // horizontal axis at the top
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
-        context.strokePath()
+//        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+//        context.strokePath()
 
         // horizontal axis when y = 0
         if min.y < 0 && max.y > 0 {
@@ -539,15 +554,15 @@ open class Chart: UIControl {
             context.strokePath()
         }
 
-        // vertical axis on the left
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
-        context.strokePath()
-
-        // vertical axis on the right
-        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
-        context.strokePath()
+//        // vertical axis on the left
+//        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
+//        context.strokePath()
+//
+//        // vertical axis on the right
+//        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+//        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
+//        context.strokePath()
     }
 
     fileprivate func drawLabelsAndGridOnXAxis() {
@@ -572,11 +587,11 @@ open class Chart: UIControl {
 
             // Add vertical grid for each label, except axes on the left and right
 
-            if x != 0 && x != drawingWidth {
-                context.move(to: CGPoint(x: x, y: CGFloat(0)))
-                context.addLine(to: CGPoint(x: x, y: bounds.height))
-                context.strokePath()
-            }
+//            if x != 0 && x != drawingWidth {
+//                context.move(to: CGPoint(x: x, y: CGFloat(0)))
+//                context.addLine(to: CGPoint(x: x, y: bounds.height))
+//                context.strokePath()
+//            }
 
             if xLabelsSkipLast && isLastLabel {
                 // Do not add label at the most right position
@@ -638,10 +653,13 @@ open class Chart: UIControl {
 
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
+        let yPadding: CGFloat = 3
         let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: 0))
 
         scaled.enumerated().forEach { (i, value) in
 
+            print("\(i): \(value)")
+            
             let y = CGFloat(value)
 
             // Add horizontal grid for each label, but not over axes
@@ -649,12 +667,12 @@ open class Chart: UIControl {
 
                 context.move(to: CGPoint(x: CGFloat(0), y: y))
                 context.addLine(to: CGPoint(x: self.bounds.width, y: y))
-                if labels[i] != 0 {
-                    // Horizontal grid for 0 is not dashed
-                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
-                } else {
-                    context.setLineDash(phase: CGFloat(0), lengths: [])
-                }
+//                if labels[i] != 0 {
+//                    // Horizontal grid for 0 is not dashed
+//                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
+//                } else {
+//                    context.setLineDash(phase: CGFloat(0), lengths: [])
+//                }
                 context.strokePath()
             }
 
@@ -670,7 +688,7 @@ open class Chart: UIControl {
             }
 
             // Labels should be placed above the horizontal grid
-            label.frame.origin.y -= label.frame.height
+            label.frame.origin.y -= label.frame.height + yPadding
 
             self.addSubview(label)
         }
