@@ -738,7 +738,7 @@ open class Chart: UIControl {
             return
         }
 
-        drawHighlightLineFromLeftPosition(left)
+//        drawHighlightLineFromLeftPosition(left)
 
         if delegate == nil {
             return
